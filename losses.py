@@ -25,7 +25,7 @@ class DinoCenter:
         return F.softmax((teacher_logits - self.center) / max(temp, 1e-6), dim=-1)
 
 def teacher_temp(step: int, steps_per_epoch: int, epoch: float, cfg: UticaConfig):
-    # linear warmup then constant (or you can keep warming to end)
+    
     if epoch < cfg.teacher_temp_warmup_epochs:
         frac = epoch / max(cfg.teacher_temp_warmup_epochs, 1e-6)
         return cfg.teacher_temp_start + frac * (cfg.teacher_temp_end - cfg.teacher_temp_start)
