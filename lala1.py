@@ -17,8 +17,14 @@ color_palette = ["blue", "red", "violet", "lightgreen"]
 plt.title("Sample Time Series from UCR ECG200 Dataset")
 plt.xlabel("Time")
 plt.ylabel("Value")
-# for i in range(4):  # plot first 5 samples
-#     plt.plot(X_train[i].ravel(), label=f"class {y_train[i]}", c=color_palette[i])
+for i in range(4):  # plot first 5 samples
+    plt.plot(
+        X_train[i].ravel(),
+        label=f"class {y_train[i]}",
+        c=color_palette[i],
+        lw=2,
+        alpha=0.7,
+    )
 
 plt.legend()
 plt.grid(lw=1, alpha=0.3)
