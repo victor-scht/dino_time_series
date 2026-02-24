@@ -41,7 +41,7 @@ def encode(model: UticaModel, X: torch.Tensor, batch_size=256):
     dl = torch.utils.data.DataLoader(X, batch_size=batch_size, shuffle=False)
     for xb in dl:
         xb = xb.to(device)
-        cls, _ = model(xb)     # <-- DINO-only: 2 outputs
+        cls, _ = model(xb)     
         feats.append(cls.detach().cpu())
     return torch.cat(feats, dim=0)
 
