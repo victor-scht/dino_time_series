@@ -28,5 +28,6 @@ for i in range(4):  # plot first 5 samples
 
 plt.legend()
 plt.grid(lw=1, alpha=0.3)
+plt.savefig("ucr_ecg.png", dpi=300)
 
 plt.show()
