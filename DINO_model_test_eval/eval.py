@@ -12,6 +12,7 @@ import torch.nn.functional as F
 from einops import rearrange
 from tqdm import tqdm
 
+
 def resample_to_T(x_np: np.ndarray, T: int) -> np.ndarray:
     """
     Retourne toujours un array (B, C, T).
@@ -21,7 +22,7 @@ def resample_to_T(x_np: np.ndarray, T: int) -> np.ndarray:
       - (B, C, T)
     """
     if x_np.ndim == 2:
-        x = torch.from_numpy(x_np).float().unsqueeze(1)   # (B,1,T)
+        x = torch.from_numpy(x_np).float().unsqueeze(1)  # (B,1,T)
     elif x_np.ndim == 3:
         # Heuristique: si dernière dim petite => souvent (B,T,C)
         if x_np.shape[2] <= 16 and x_np.shape[1] > x_np.shape[2]:
@@ -35,22 +36,26 @@ def resample_to_T(x_np: np.ndarray, T: int) -> np.ndarray:
     x = F.interpolate(x, size=T, mode="linear", align_corners=False)
     return x.numpy()  # (B,C,T)
 
+
 def encode(model: UticaModel, X: torch.Tensor, batch_size=256):
     model.eval()
     feats = []
     dl = torch.utils.data.DataLoader(X, batch_size=batch_size, shuffle=False)
     for xb in dl:
         xb = xb.to(device)
-        cls, _ = model(xb)     
+        cls, _ = model(xb)
         feats.append(cls.detach().cpu())
     return torch.cat(feats, dim=0)
+
 
 class LinearProbe(nn.Module):
     def __init__(self, d_in: int, n_classes: int):
         super().__init__()
         self.fc = nn.Linear(d_in, n_classes)
 
-    def forward(self, x): return self.fc(x)
+    def forward(self, x):
+        return self.fc(x)
+
 
 def train_linear_probe(feats_train, y_train, feats_test, y_test, lr=1e-3, epochs=50):
     n_classes = int(y_train.max().item() + 1)
